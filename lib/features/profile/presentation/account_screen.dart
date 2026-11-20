@@ -60,42 +60,42 @@ class _AccountBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.accountTitle)),
+      appBar: AppBar(
+        // Serif title, matching the canvas "Account Settings" chrome.
+        title: Text(
+          l10n.accountTitle,
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsetsDirectional.all(LegalHubTheme.marginMobile),
         children: <Widget>[
-          Text(
-            l10n.accountProfileTitle,
-            style: Theme.of(context).textTheme.titleLarge,
+          _AccountCard(
+            title: l10n.accountProfileTitle,
+            child: _ProfileEdit(onError: _showError),
           ),
-          const SizedBox(height: LegalHubTheme.spaceSm),
-          _ProfileEdit(onError: _showError),
-          const Divider(height: LegalHubTheme.spaceXl),
-          Text(
-            l10n.accountPasswordTitle,
-            style: Theme.of(context).textTheme.titleLarge,
+          const SizedBox(height: LegalHubTheme.spaceMd),
+          _AccountCard(
+            title: l10n.accountPasswordTitle,
+            child: _PasswordChange(onError: _showError),
           ),
-          const SizedBox(height: LegalHubTheme.spaceSm),
-          _PasswordChange(onError: _showError),
-          const Divider(height: LegalHubTheme.spaceXl),
-          Text(
-            l10n.accountDangerTitle,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Theme.of(context).colorScheme.error,
+          const SizedBox(height: LegalHubTheme.spaceMd),
+          _DangerCard(
+            title: l10n.accountDangerTitle,
+            child: ListTile(
+              contentPadding: const EdgeInsetsDirectional.symmetric(
+                horizontal: LegalHubTheme.spaceMd,
+              ),
+              leading: Icon(
+                Icons.delete_forever_outlined,
+                color: Theme.of(context).colorScheme.error,
+              ),
+              title: Text(
+                l10n.accountDeleteAction,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+              onTap: () => _openDeleteSheet(context),
             ),
-          ),
-          const SizedBox(height: LegalHubTheme.spaceSm),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(
-              Icons.delete_forever_outlined,
-              color: Theme.of(context).colorScheme.error,
-            ),
-            title: Text(
-              l10n.accountDeleteAction,
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-            onTap: () => _openDeleteSheet(context),
           ),
         ],
       ),
@@ -269,6 +269,100 @@ class _PasswordChangeState extends State<_PasswordChange> {
           ],
         );
       },
+    );
+  }
+}
+
+/// Card surface for one account section: serif heading, hairline rule, then
+/// the section body. Matches the canvas "Account Settings" grouping.
+class _AccountCard extends StatelessWidget {
+  const _AccountCard({required this.title, required this.child});
+
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    final BorderRadius radius = BorderRadius.circular(LegalHubTheme.radiusXl);
+    return Material(
+      color: colors.brightness == Brightness.dark
+          ? colors.surfaceContainerLow
+          : colors.surfaceContainerLowest,
+      elevation: 0,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: radius,
+        side: BorderSide(color: colors.outlineVariant),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(
+              LegalHubTheme.spaceMd,
+              LegalHubTheme.spaceMd,
+              LegalHubTheme.spaceMd,
+              LegalHubTheme.spaceSm,
+            ),
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ),
+          const Divider(height: 1),
+          Padding(
+            padding: const EdgeInsetsDirectional.all(LegalHubTheme.spaceMd),
+            child: child,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Destructive section: tinted container so the danger zone reads as a
+/// separate, irreversible area rather than another settings group.
+class _DangerCard extends StatelessWidget {
+  const _DangerCard({required this.title, required this.child});
+
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    final BorderRadius radius = BorderRadius.circular(LegalHubTheme.radiusXl);
+    return Material(
+      color: colors.errorContainer.withValues(alpha: 0.35),
+      elevation: 0,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: radius,
+        side: BorderSide(color: colors.error.withValues(alpha: 0.35)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(
+              LegalHubTheme.spaceMd,
+              LegalHubTheme.spaceMd,
+              LegalHubTheme.spaceMd,
+              LegalHubTheme.spaceXs,
+            ),
+            child: Text(
+              title,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(color: colors.error),
+            ),
+          ),
+          child,
+        ],
+      ),
     );
   }
 }

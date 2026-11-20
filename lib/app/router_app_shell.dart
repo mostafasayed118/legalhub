@@ -159,13 +159,54 @@ class _AppShell extends StatelessWidget {
       ),
       bottomNavigationBar: !showNavigation || useRail
           ? null
-          : NavigationBar(
-              selectedIndex: safeIndex,
-              onDestinationSelected: selectDestination,
-              destinations: <Widget>[
-                for (final (String, NavigationDestination) destination
-                    in destinations)
-                  destination.$2,
+          // Canvas chrome: a flat bar (no Material elevation) under a single
+          // hairline, with a short accent rule sitting on that hairline above
+          // the active destination. The rule is laid out in the same equal
+          // slots NavigationBar uses for its destinations, and positioned
+          // directionally so it follows the active item in RTL too.
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Divider(
+                  height: 1,
+                  thickness: 1,
+                  color:
+                      Theme.of(context).dividerTheme.color ??
+                      Theme.of(context).colorScheme.outlineVariant,
+                ),
+                LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    final double slot =
+                        constraints.maxWidth / destinations.length;
+                    final double ruleWidth = slot * 0.55;
+                    final Color accent =
+                        Theme.of(context).navigationBarTheme.iconTheme?.resolve(
+                          <WidgetState>{WidgetState.selected},
+                        )?.color ??
+                        Theme.of(context).colorScheme.primary;
+                    return Stack(
+                      children: <Widget>[
+                        NavigationBar(
+                          selectedIndex: safeIndex,
+                          onDestinationSelected: selectDestination,
+                          destinations: <Widget>[
+                            for (final (String, NavigationDestination)
+                                destination
+                                in destinations)
+                              destination.$2,
+                          ],
+                        ),
+                        PositionedDirectional(
+                          start: (safeIndex + 0.5) * slot - ruleWidth / 2,
+                          top: 0,
+                          width: ruleWidth,
+                          height: 3,
+                          child: ColoredBox(color: accent),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ],
             ),
     );

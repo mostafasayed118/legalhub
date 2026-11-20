@@ -208,15 +208,20 @@ class LegalHubTheme {
     final Color onSurfaceVariantColor = isDark
         ? darkOnSurfaceVariant
         : onSurfaceVariant;
+    final String fontFamily = kRtlLocaleCodes.contains(locale.languageCode)
+        ? 'NotoNaskhArabic'
+        : 'NotoSans';
+    // Navigation chrome accent: the gold that marks the active destination in
+    // the Stitch frames. Light uses the deep Old Gold so it passes contrast on
+    // the pale surface; dark uses the brighter gold for the navy surface.
+    final Color navAccent = isDark ? darkSecondary : secondary;
 
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
       colorScheme: scheme,
       scaffoldBackgroundColor: scaffoldBg,
-      fontFamily: kRtlLocaleCodes.contains(locale.languageCode)
-          ? 'NotoNaskhArabic'
-          : 'NotoSans',
+      fontFamily: fontFamily,
       // The Legal Library corpus is Arabic source text even when the UI
       // locale is English. Without an explicit fallback those glyphs render
       // as tofu in the English theme (caught by the screenshot review).
@@ -284,6 +289,59 @@ class LegalHubTheme {
         margin: EdgeInsets.zero,
       ),
       dividerTheme: DividerThemeData(color: dividerColor, thickness: 1),
+      // Shell navigation chrome (Phase 2). The canvas frames mark the active
+      // destination with gold on a flat, divider-separated bar — no Material
+      // pill indicator — so the indicator is removed and the selected
+      // icon/label carry the accent instead.
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: appBarBg,
+        elevation: 0,
+        height: 68,
+        indicatorColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        iconTheme: WidgetStateProperty.resolveWith<IconThemeData>((
+          Set<WidgetState> states,
+        ) {
+          final bool selected = states.contains(WidgetState.selected);
+          return IconThemeData(
+            size: 24,
+            color: selected ? navAccent : onSurfaceVariantColor,
+          );
+        }),
+        labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((
+          Set<WidgetState> states,
+        ) {
+          final bool selected = states.contains(WidgetState.selected);
+          return TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 12,
+            fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+            letterSpacing: 0.2,
+            color: selected ? navAccent : onSurfaceVariantColor,
+          );
+        }),
+      ),
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: appBarBg,
+        indicatorColor: Colors.transparent,
+        useIndicator: false,
+        selectedIconTheme: IconThemeData(color: navAccent),
+        unselectedIconTheme: IconThemeData(color: onSurfaceVariantColor),
+        selectedLabelTextStyle: TextStyle(
+          fontFamily: fontFamily,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.2,
+          color: navAccent,
+        ),
+        unselectedLabelTextStyle: TextStyle(
+          fontFamily: fontFamily,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0.2,
+          color: onSurfaceVariantColor,
+        ),
+      ),
     );
   }
 }
