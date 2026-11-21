@@ -47,7 +47,8 @@ No other source file changed. `lib/app/legalhub_theme.dart` remains untouched as
 - Raw renders: `docs/redesign/phase3/visual-comparison/rendered/` — **108 screenshots** = 9 surfaces × light/dark × phone/wide × EN/AR/TR (the accepted 96-capture matrix plus delete-sheet and onboarding/success states).
 - Comparison sheets: `docs/redesign/phase3/visual-comparison/comparison/` — **30 sheets**: 18 frame-vs-render pairs (EN), 9 locale strips (EN/AR/TR), 3 wide-layout strips.
 - Per-surface findings: `docs/redesign/phase3/visual-comparison/CONFORMANCE.md`.
-- Human-reviewed only; no CI golden/screenshot tests.
+- Agent-inspected, owner review pending; no CI golden/screenshot tests.
+Unproven evidence item (Round 19): dark OTP phone TR after SnackBar dismissal, the surface could not be reached; the TR sign-in screen renders the known LH-REL-001 No MaterialLocalizations found error overlay, so no post-dismissal TR OTP capture exists. Enabled Sign Up CTA is not listed here: it was proven in Round 19 by uncommitted captures outside the repo.
 
 ---
 
@@ -67,6 +68,7 @@ No other source file changed. `lib/app/legalhub_theme.dart` remains untouched as
 | 10 | Delete Account full-height frame | Mapped to existing sheet + confirm dialog; no new route/behavior. |
 | 11 | Check Inbox | No Stitch frame (confirmed absent); app-render-only STATE under Sign Up. |
 | 12 | LH-REL-001 | Separate release-blocking issue; temporary capture-only workaround labeled; not fixed here. |
+| 13 | Light CTA label contrast vs approved Stitch frame | App label #775A19 on fill #0B1D2E measures 2.65:1; approved reference label #FFDEA5 on fill #041627 measures 14.13:1. Owner decision (2026-11-21, as relayed): align the light CTA label to the reference #FFDEA5; implementation pending as a separate change, no token or code change applied in this commit. |
 
 ---
 
@@ -96,7 +98,7 @@ No test was weakened, deleted, skipped, or modified.
 | 5 | Existing interactions preserved | Verified — §3; full suite green |
 | 6 | Cubit/gateway contracts preserved | Verified — no cubit/gateway file changed |
 | 7 | Loading/error/empty/populated states verified | Behavioral suite green; state screenshots include check-inbox, OTP-incomplete, disabled CTA, delete sheet |
-| 8 | Human-reviewed design comparisons | Done — 30 sheets, no CI goldens |
+| 8 | Agent-inspected design comparisons | 30 sheets agent-inspected; owner review pending, no CI goldens |
 | 9 | No unapproved test modifications | Verified — `test/` untouched |
 | 10 | `flutter analyze` 0 | Verified |
 | 11 | `dart format` 0 changed | Verified |
