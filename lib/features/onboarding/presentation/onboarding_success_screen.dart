@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:legalhub/app/legalhub_theme.dart';
 import 'package:legalhub/app/router.dart';
 import 'package:legalhub/app/service_locator.dart';
+import 'package:legalhub/features/auth/presentation/widgets/auth_buttons.dart';
 import 'package:legalhub/features/onboarding/presentation/onboarding_cubit.dart';
 import 'package:legalhub/l10n/app_localizations.dart';
 import 'package:legalhub/shared/widgets/widgets.dart';
@@ -72,6 +73,7 @@ class OnboardingSuccessScreen extends StatelessWidget {
                     const SizedBox(height: LegalHubTheme.spaceXl * 1.5),
                     ElevatedButton(
                       onPressed: () => _complete(context),
+                      style: authPrimaryButtonStyle(context),
                       child: Text(l10n.onboardingSuccessAction),
                     ),
                   ],

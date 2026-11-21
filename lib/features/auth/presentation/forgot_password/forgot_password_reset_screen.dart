@@ -189,6 +189,7 @@ class _ForgotPasswordResetScreenState extends State<ForgotPasswordResetScreen> {
                               label: l10n.resetPasswordButton,
                               loading: loading,
                               icon: Icons.lock_outline,
+                              style: authPrimaryButtonStyle(context),
                             ),
                           ],
                         );

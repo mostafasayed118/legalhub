@@ -267,6 +267,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     label: l10n.signUpButton,
                     loading: loading,
                     icon: Icons.lock_outline,
+                    style: authPrimaryButtonStyle(context),
                   ),
                 ],
               );

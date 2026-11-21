@@ -9,6 +9,7 @@ class LoadingElevatedButton extends StatelessWidget {
     required this.label,
     this.loading = false,
     this.icon,
+    this.style,
     super.key,
   });
 
@@ -16,6 +17,7 @@ class LoadingElevatedButton extends StatelessWidget {
   final String label;
   final bool loading;
   final IconData? icon;
+  final ButtonStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,7 @@ class LoadingElevatedButton extends StatelessWidget {
                 ));
     return ElevatedButton(
       onPressed: loading ? null : onPressed,
+      style: style,
       child: content,
     );
   }

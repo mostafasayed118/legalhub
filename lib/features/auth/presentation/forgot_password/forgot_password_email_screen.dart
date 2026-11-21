@@ -6,6 +6,7 @@ import 'package:legalhub/app/service_locator.dart';
 import 'package:legalhub/core/state/view_state.dart';
 import 'package:legalhub/features/auth/domain/password_recovery_gateway.dart';
 import 'package:legalhub/features/auth/presentation/password_recovery_cubit.dart';
+import 'package:legalhub/features/auth/presentation/widgets/auth_buttons.dart';
 import 'package:legalhub/l10n/app_localizations.dart';
 import 'package:legalhub/shared/forms/validators.dart';
 import 'package:legalhub/shared/widgets/widgets.dart';
@@ -147,6 +148,7 @@ class _ForgotPasswordEmailScreenState extends State<ForgotPasswordEmailScreen> {
                           ),
                         ElevatedButton.icon(
                           onPressed: loading ? null : () => _submit(context),
+                          style: authPrimaryButtonStyle(context),
                           icon: const DirectionalIcon(
                             icon: Icons.arrow_forward,
                             mirroredIcon: Icons.arrow_back,

@@ -3,6 +3,7 @@ import 'package:legalhub/app/legalhub_motion.dart';
 import 'package:legalhub/app/legalhub_theme.dart';
 import 'package:legalhub/app/router.dart';
 import 'package:legalhub/app/service_locator.dart';
+import 'package:legalhub/features/auth/presentation/widgets/auth_buttons.dart';
 import 'package:legalhub/features/onboarding/presentation/onboarding_cubit.dart';
 import 'package:legalhub/l10n/app_localizations.dart';
 import 'package:legalhub/shared/widgets/widgets.dart';
@@ -147,10 +148,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const SizedBox(height: LegalHubTheme.spaceXl),
                   ElevatedButton.icon(
                     onPressed: _next,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: scheme.primaryContainer,
-                      foregroundColor: scheme.onPrimaryContainer,
-                    ),
+                    style: authPrimaryButtonStyle(context),
                     icon: DirectionalIcon(
                       icon: Icons.arrow_forward,
                       mirroredIcon: Icons.arrow_back,

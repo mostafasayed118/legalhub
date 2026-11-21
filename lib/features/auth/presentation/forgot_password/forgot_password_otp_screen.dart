@@ -6,6 +6,7 @@ import 'package:legalhub/app/service_locator.dart';
 import 'package:legalhub/core/state/view_state.dart';
 import 'package:legalhub/features/auth/domain/password_recovery_gateway.dart';
 import 'package:legalhub/features/auth/presentation/password_recovery_cubit.dart';
+import 'package:legalhub/features/auth/presentation/widgets/auth_buttons.dart';
 import 'package:legalhub/l10n/app_localizations.dart';
 import 'package:legalhub/shared/widgets/widgets.dart';
 import 'package:material_ui/material_ui.dart';
@@ -160,6 +161,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                             onPressed: (complete && !loading)
                                 ? () => _verify(context, incoming)
                                 : null,
+                            style: authPrimaryButtonStyle(context),
                             child: loading
                                 ? const SizedBox.square(
                                     dimension: 18,

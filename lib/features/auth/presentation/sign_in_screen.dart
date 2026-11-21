@@ -245,6 +245,7 @@ class _SignInSubmitButton extends StatelessWidget {
           label: l10n.signInButton,
           loading: loading,
           icon: Icons.lock_outline,
+          style: authPrimaryButtonStyle(context),
         );
       },
     );
