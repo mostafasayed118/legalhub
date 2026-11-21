@@ -3,11 +3,18 @@
 /// the sign-in / sign-up / password-recovery screens and their tests).
 library;
 
+import 'package:legalhub/app/legalhub_theme.dart';
 import 'package:material_ui/material_ui.dart';
 
 export 'editorial_divider.dart';
 export 'loading_elevated_button.dart';
 export 'social_button.dart';
+
+// The approved light CTA label (#FFDEA5) is ratified in the token file under
+// the dark-scheme name darkOnSecondaryContainer; the light ColorScheme has
+// no slot with this value, so read the token directly and give it a
+// light-correct local name. No new hex literal.
+const Color _lightCtaLabel = LegalHubTheme.darkOnSecondaryContainer;
 
 /// Primary CTA treatment from the approved Stitch auth frames: gold label on
 /// the navy button in light, gold fill with dark label in dark. Appearance
@@ -19,5 +26,5 @@ ButtonStyle authPrimaryButtonStyle(BuildContext context) {
           backgroundColor: theme.colorScheme.secondary,
           foregroundColor: theme.colorScheme.onSecondary,
         )
-      : ElevatedButton.styleFrom(foregroundColor: theme.colorScheme.secondary);
+      : ElevatedButton.styleFrom(foregroundColor: _lightCtaLabel);
 }
