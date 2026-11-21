@@ -48,7 +48,9 @@ No other source file changed. `lib/app/legalhub_theme.dart` remains untouched as
 - Comparison sheets: `docs/redesign/phase3/visual-comparison/comparison/` — **30 sheets**: 18 frame-vs-render pairs (EN), 9 locale strips (EN/AR/TR), 3 wide-layout strips.
 - Per-surface findings: `docs/redesign/phase3/visual-comparison/CONFORMANCE.md`.
 - Agent-inspected, owner review pending; no CI golden/screenshot tests.
-Unproven evidence item (Round 19): dark OTP phone TR after SnackBar dismissal, the surface could not be reached; the TR sign-in screen renders the known LH-REL-001 No MaterialLocalizations found error overlay, so no post-dismissal TR OTP capture exists. Enabled Sign Up CTA is not listed here: it was proven in Round 19 by uncommitted captures outside the repo.
+- Unproven evidence item (Round 19): dark OTP phone TR after SnackBar dismissal, the surface could not be reached; the TR sign-in screen renders the known `LH-REL-001` `No MaterialLocalizations found` error overlay, so no post-dismissal TR OTP capture exists. Enabled Sign Up CTA is not listed here: it was proven in Round 19 by uncommitted captures outside the repo.
+- Unproven evidence item (light-label verification): the CTA loading state was not observed; three bounded attempts on Sign In captured the filled form and the post-sign-in home shell, but no frame showed the CTA spinner. Code-analysis only, not observed: loading sets `onPressed: null`, resolving to the M3 disabled colors, and the spinner uses `colorScheme.primary`, not `foregroundColor`.
+- Note: the 108 committed screenshots are stale for the light CTA after the label change (commit `8a07016`); refreshing them is a separate owner decision.
 
 ---
 
@@ -68,7 +70,7 @@ Unproven evidence item (Round 19): dark OTP phone TR after SnackBar dismissal, t
 | 10 | Delete Account full-height frame | Mapped to existing sheet + confirm dialog; no new route/behavior. |
 | 11 | Check Inbox | No Stitch frame (confirmed absent); app-render-only STATE under Sign Up. |
 | 12 | LH-REL-001 | Separate release-blocking issue; temporary capture-only workaround labeled; not fixed here. |
-| 13 | Light CTA label contrast vs approved Stitch frame | App label #775A19 on fill #0B1D2E measures 2.65:1; approved reference label #FFDEA5 on fill #041627 measures 14.13:1. Owner decision (2026-11-21, as relayed): align the light CTA label to the reference #FFDEA5; implementation pending as a separate change, no token or code change applied in this commit. |
+| 13 | Light CTA label contrast vs approved Stitch frame | App label `#775A19` on fill `#0B1D2E` measures **2.65:1**; approved reference label `#FFDEA5` on fill `#041627` measures **14.13:1**. Owner decision (2026-11-21, as relayed): align the light CTA label to the reference `#FFDEA5`. Implemented in commit `8a07016` (option (a), one file `auth_buttons.dart`): all 7 measured light CTA captures read `#FFDEA5` on fill `#0B1D2E`, contrast **13.2125:1** (Sign Up and OTP measured in the enabled state, phone EN only); gates analyze 0, format 0, tests 2,447 pass / 13 skip / 0 fail; disabled state proves no leak; leading icon changed with the label as authorized. |
 
 ---
 

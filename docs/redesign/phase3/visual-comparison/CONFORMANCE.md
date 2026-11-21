@@ -32,7 +32,7 @@ Claims below come from those rendered images, not from automated theme/responsiv
 
 **Matches:** serif headings, outlined email field, inline error + retry pattern, six-cell OTP, forced-LTR digits under Arabic RTL, resend/help copy, success SnackBar then `go(signIn)`.
 
-CTA evidence limitation: authPrimaryButtonStyle is applied in source to the email, OTP and reset buttons. Every committed OTP screenshot shows the CTA in its disabled state (empty six-digit code), so the gold treatment is not visible in those images. Enabled-state OTP captures exist only as uncommitted evidence outside the repo (r18_capture2 otp_light_phone_en_filled.png and otp_dark_phone_en_filled.png); they are not part of the 108 committed renders.
+**CTA evidence limitation:** `authPrimaryButtonStyle` is applied in source to the email, OTP and reset buttons. Every committed OTP screenshot shows the CTA in its disabled state (empty six-digit code), so the gold treatment is not visible in those images. Enabled-state OTP captures exist only as uncommitted evidence outside the repo (r18_capture2 otp_light_phone_en_filled.png and otp_dark_phone_en_filled.png); they are not part of the 108 committed renders.
 
 **Differences:** app copy is the pinned l10n text; frame spacing differs slightly because exports are scaled. The three dark exports' correctness is verified against the ratified theme tokens, not against the broken dark artifacts (Reset Password dark is explicitly non-authoritative).
 
@@ -48,7 +48,7 @@ CTA evidence limitation: authPrimaryButtonStyle is applied in source to the emai
 
 **Differences:** frame-only extras (2FA, hardware devices, version footer, Bar ID, full-height cancel button) are out of scope; no new l10n keys or routes were added.
 
-Scrim / barrier (unrecorded deviation): the agent-sampled phone reference frame (9a52c7a5, 608x1600) shows no scrim or dimmed backdrop (edge pixels #F9F9FF); wide reference not checked. No scrim or dimmed backdrop is depicted in the approved reference; the reference does not define modal barrier behavior. The app presents the delete confirmation through showDialog / showModalBottomSheet (lib/shared/widgets/app_modal_sheet.dart:33,48), inheriting Flutter's default Colors.black54 barrier. No barrierColor is set anywhere in lib/ at 2600963 or f80c9c3, and the modal-sheet file is byte-identical at both commits (2a157da2), so this behavior is unchanged since f80c9c3. It was absent from this document as of 2600963; recorded here as an unrecorded deviation, with no behavior change applied.
+**Scrim / barrier (unrecorded deviation):** the agent-sampled phone reference frame (9a52c7a5, 608x1600) shows no scrim or dimmed backdrop (edge pixels #F9F9FF); wide reference not checked. No scrim or dimmed backdrop is depicted in the approved reference; the reference does not define modal barrier behavior. The app presents the delete confirmation through `showDialog` / `showModalBottomSheet` (lib/shared/widgets/app_modal_sheet.dart:33,48), inheriting Flutter's default `Colors.black54` barrier. No `barrierColor` is set anywhere in `lib/` at `2600963` or `f80c9c3`, and the modal-sheet file is byte-identical at both commits (2a157da2), so this behavior is unchanged since `f80c9c3`. It was absent from this document as of `2600963`; recorded here as an unrecorded deviation, with no behavior change applied.
 
 ## Locale / layout observations
 
