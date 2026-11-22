@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:cupertino_ui/cupertino_ui.dart'
+    show GlobalCupertinoLocalizations;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart'
+    show GlobalWidgetsLocalizations;
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -223,7 +227,12 @@ class LegalHubApp extends StatelessWidget {
                 ),
                 themeMode: themeMode,
                 locale: state.locale,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                ],
                 supportedLocales: AppLocalizations.supportedLocales,
                 routerConfig: router,
               );
