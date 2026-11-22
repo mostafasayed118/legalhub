@@ -1,6 +1,6 @@
 # Phase 3 visual conformance — per-surface record
 
-Evidence: `docs/redesign/phase3/visual-comparison/rendered/` (108 screenshots: 9 surfaces × light/dark × phone/wide × EN/AR/TR), `comparison/` (30 agent-inspected sheets, owner review pending), approved references in `docs/redesign/phase3/reference-frames/`. 5 of the 10 enabled light CTA captures were refreshed (phone `en` only); the 5 wide `en` and 20 `ar`/`tr` light CTA captures remain stale; no full-matrix verification is claimed. No CI golden/screenshot tests.
+Evidence: `docs/redesign/phase3/visual-comparison/rendered/` (108 screenshots: 9 surfaces × light/dark × phone/wide × EN/AR/TR), `comparison/` (30 agent-inspected sheets, owner review pending), approved references in `docs/redesign/phase3/reference-frames/`. 10 of the 10 enabled light CTA captures were refreshed (phone `en` and wide `en`, default GPU); the 20 `ar`/`tr` light CTA captures remain stale; no full-matrix verification is claimed. No CI golden/screenshot tests.
 
 ## Inspected sheets (documented subset)
 
