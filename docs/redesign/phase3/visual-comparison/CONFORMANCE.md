@@ -1,6 +1,7 @@
 # Phase 3 visual conformance — per-surface record
 
 Evidence: `docs/redesign/phase3/visual-comparison/rendered/` (108 screenshots: 9 surfaces × light/dark × phone/wide × EN/AR/TR), `comparison/` (30 agent-inspected sheets, owner review pending), approved references in `docs/redesign/phase3/reference-frames/`. 10 of the 10 enabled light CTA captures were refreshed (phone `en` and wide `en`, default GPU); the 20 `ar`/`tr` light CTA captures remain stale; no full-matrix verification is claimed. No CI golden/screenshot tests.
+Exactly one comparison sheet embeds the 5 refreshed wide captures: `wide_en_light.png`; frame/render pairs and locale strips are built from phone renders and only the `wide_*_light.png` strips consume wide renders.
 
 ## Inspected sheets (documented subset)
 
