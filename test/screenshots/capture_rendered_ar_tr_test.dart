@@ -6,17 +6,21 @@
 //
 //   $env:LH_STAGING_DIR = '<temp staging dir>'
 //   $env:CAPTURE_RENDERED_AR_TR = '1'
-//   flutter test test/screenshots/capture_rendered_ar_tr_test.dart --concurrency=1 --update-goldens
+//   flutter test test/screenshots/capture_rendered_ar_tr_test.dart --concurrency=1
 //
-// Captures are written to LH_STAGING_DIR via a LocalFileComparator whose
-// basedir is the staging directory. Promotion into rendered/ is a SEPARATE
-// step performed by the owner-side script; this file never writes there.
+// Output is a TRUE 3x/2x re-render: OffsetLayer.toImage is called with the
+// same pixelRatio as the view DPR, producing 1080x2400 (phone) and 2560x1600
+// (wide) PNGs. matchesGoldenFile/captureImage always uses pixelRatio 1.0 and
+// is deliberately NOT used here. Captures are written straight to LH_STAGING_DIR;
+// promotion into rendered/ is a SEPARATE step and this file never writes there.
 // Outputs are test-harness renders, NOT release builds and NOT evidence for
 // LH-REL-001.
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui' as ui;
 
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:legalhub/app/localization/locale_cubit.dart';
@@ -62,8 +66,11 @@ class _Spec {
       ? const Size(1080, 2400) // 360x800 @3x
       : const Size(2560, 1600); // 1280x800 @2x
   double get dpr => layout == 'phone' ? 3.0 : 2.0;
-  int get imageWidth => (physicalSize.width / dpr).toInt();
-  int get imageHeight => (physicalSize.height / dpr).toInt();
+  Size get logicalSize =>
+      layout == 'phone' ? const Size(360, 800) : const Size(1280, 800);
+  // toImage(bounds, pixelRatio: dpr) emits dpr * logical pixels.
+  int get imageWidth => physicalSize.width.toInt();
+  int get imageHeight => physicalSize.height.toInt();
 }
 
 List<_Spec> _specsFor(Locale locale) => <_Spec>[
@@ -164,11 +171,6 @@ void main() {
     if (!staging.existsSync()) {
       staging.createSync(recursive: true);
     }
-    // Golden keys resolve relative to this comparator's basedir, so every
-    // capture lands in the staging directory and NEVER in rendered/.
-    goldenFileComparator = LocalFileComparator(
-      Uri.file('$stagingPath${Platform.pathSeparator}_harness.dart'),
-    );
   }
 
   List<Map<String, dynamic>> manifest = <Map<String, dynamic>>[];
@@ -179,6 +181,46 @@ void main() {
     // golden comparator's writes are already wrapped in runAsync internally.
     final File out = File('$stagingPath${Platform.pathSeparator}$name');
     out.writeAsStringSync(const JsonEncoder.withIndent('  ').convert(manifest));
+  }
+
+  // TRUE re-render at the view DPR. matchesGoldenFile would rasterise at 1x
+  // because flutter_test's captureImage calls toImage(bounds) with no
+  // pixelRatio; here we pass pixelRatio explicitly and agree it with the view.
+  Future<void> captureAtDpr(WidgetTester tester, _Spec spec) async {
+    expect(
+      tester.view.devicePixelRatio,
+      spec.dpr,
+      reason: 'view DPR and capture pixelRatio must agree',
+    );
+    final RenderObject renderObject = tester
+        .element(find.byKey(_rootKey))
+        .renderObject!;
+    RenderObject boundary = renderObject;
+    while (!boundary.isRepaintBoundary) {
+      boundary = boundary.parent!;
+    }
+    final OffsetLayer layer = boundary.debugLayer! as OffsetLayer;
+    final List<int> png = (await tester.binding.runAsync<List<int>>(() async {
+      final ui.Image image = await layer.toImage(
+        boundary.paintBounds,
+        pixelRatio: spec.dpr,
+      );
+      try {
+        final imageBytes = await image.toByteData(
+          format: ui.ImageByteFormat.png,
+        );
+        if (imageBytes == null) {
+          throw StateError('PNG encode failed for ${spec.fileName}');
+        }
+        return imageBytes.buffer.asUint8List();
+      } finally {
+        image.dispose();
+      }
+    }))!;
+    final File out = File(
+      '$stagingPath${Platform.pathSeparator}${spec.fileName}',
+    );
+    out.writeAsBytesSync(png);
   }
 
   Future<void> pumpSpec(WidgetTester tester, _Spec spec) async {
@@ -242,6 +284,20 @@ void main() {
   ) async {
     await pumpSpec(tester, spec);
 
+    // Logical-layout guard: DPR changes only resolution, never layout.
+    final Size logical =
+        tester.view.physicalSize / tester.view.devicePixelRatio;
+    expect(
+      logical,
+      spec.logicalSize,
+      reason: 'logical size must stay unchanged at the new DPR',
+    );
+    expect(
+      tester.takeException(),
+      isNull,
+      reason: 'no overflow or layout exception during pump',
+    );
+
     // LH-REL-001 assertion: the fork MaterialLocalizations must be present at
     // a context inside the screen that builds the material_ui CTA.
     final Element screen = tester.element(find.byType(Scaffold).first);
@@ -268,13 +324,34 @@ void main() {
     );
 
     final Finder ctaFinder = find.widgetWithText(ElevatedButton, ctaLabel);
-    List<double>? ctaRect;
-    if (ctaFinder.evaluate().isNotEmpty) {
-      final Rect rect = tester.getRect(ctaFinder.first);
-      ctaRect = <double>[rect.left, rect.top, rect.width, rect.height];
-    }
+    expect(ctaFinder.evaluate().isNotEmpty, isTrue, reason: 'CTA must exist');
+    final Rect rect = tester.getRect(ctaFinder.first);
+    final List<double> ctaRect = <double>[
+      rect.left,
+      rect.top,
+      rect.width,
+      rect.height,
+    ];
+    expect(
+      ctaRect[3],
+      48.0,
+      reason: 'CTA logical height must match the 1x baseline',
+    );
+    expect(
+      rect.left >= 0 &&
+          rect.top >= 0 &&
+          rect.right <= spec.logicalSize.width &&
+          rect.bottom <= spec.logicalSize.height,
+      isTrue,
+      reason: 'CTA logical geometry must stay inside the logical viewport',
+    );
 
-    await expectLater(find.byKey(_rootKey), matchesGoldenFile(spec.fileName));
+    try {
+      await captureAtDpr(tester, spec);
+    } finally {
+      // No DPR may leak into the next capture.
+      tester.view.reset();
+    }
 
     return <String, dynamic>{
       'file': spec.fileName,
@@ -286,6 +363,8 @@ void main() {
       'dpr': spec.dpr,
       'image_w': spec.imageWidth,
       'image_h': spec.imageHeight,
+      'logical_w': spec.logicalSize.width.toInt(),
+      'logical_h': spec.logicalSize.height.toInt(),
       'cta_rect_logical': ctaRect,
     };
   }
@@ -322,15 +401,25 @@ void main() {
     );
   }, skip: !enabled);
 
-  testWidgets('probe: sign-in light phone AR and TR', (
+  testWidgets('probe: sign-in light phone and wide AR/TR', (
     WidgetTester tester,
   ) async {
     if (!enabled) {
       return;
     }
     manifest = <Map<String, dynamic>>[];
-    manifest.add(await renderOne(tester, _specsFor(const Locale('ar')).first));
-    manifest.add(await renderOne(tester, _specsFor(const Locale('tr')).first));
+    for (final Locale locale in const <Locale>[Locale('ar'), Locale('tr')]) {
+      final List<_Spec> specs = _specsFor(locale);
+      manifest.add(await renderOne(tester, specs.first));
+      manifest.add(
+        await renderOne(
+          tester,
+          specs.firstWhere(
+            (_Spec s) => s.surface == 'sign_in' && s.layout == 'wide',
+          ),
+        ),
+      );
+    }
     writeManifest('probe_manifest.json');
   }, skip: !enabled);
 
