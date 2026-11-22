@@ -289,7 +289,7 @@ Arabic or Turkish** — the app crashes with `No MaterialLocalizations found`.
 **Disposition:** known, pre-existing, **release-blocking for all non-English
 locales**. It is deliberately **not fixed in Phase 2**.
 
-- **Separate remediation task:** `LH-REL-001 — keep material_ui/cupertino_ui
+- **Separate remediation task:** `LH-REL-001 — keep material_ui/cupertino_ui Phase C status (2026-11-22): fix committed locally as `b8a37fe` on `redesign/stitch-alignment` (parent `6bffe17`), one file `lib/main.dart`, unpushed, under an explicit owner waiver naming five unverified items: EN pixel comparison, real-tree AR/TR run, Cupertino rendering, per-delegate load results, preservation control. Fix verified in probe builds, gates green, real-tree AR/TR unproven; LH-REL-001 is not resolved.
   localization delegates through APK builds` (to be registered in the owner's
   tracker; no external tracker was touched).
 - **Owner:** Project Owner (github.com/mostafasayed118), matching the repo's
