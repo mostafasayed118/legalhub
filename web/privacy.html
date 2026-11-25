@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — LegalHub</title>
+<meta name="description" content="LegalHub Privacy Policy.">
+<style>
+  :root { --navy: #0B1D2E; --gold: #775A19; --ink: #1c2430; --muted: #5b6470; --line: #e4e7ea; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: var(--ink); background: #fff; line-height: 1.65; }
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  header { background: var(--navy); color: #fff; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 20px; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .brand { font-size: 20px; font-weight: 700; color: #fff; }
+  nav a { color: #d7dee6; margin-left: 22px; font-size: 15px; }
+  nav a:hover { color: #fff; }
+  main { padding: 48px 0 64px; }
+  h1 { font-size: 32px; color: var(--navy); margin-bottom: 8px; }
+  .notice { background: #fff8e6; border: 1px solid #ecd9a0; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin: 18px 0 28px; }
+  h2 { font-size: 20px; color: var(--navy); margin: 28px 0 8px; }
+  p { margin-bottom: 12px; }
+  footer { border-top: 1px solid var(--line); padding: 28px 0 36px; font-size: 14px; color: var(--muted); }
+  footer a { margin-left: 18px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand"><a href="index.html" style="color:#fff;">LegalHub</a></div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </nav>
+    </div>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <h1>LegalHub Privacy Policy</h1>
+    <div class="notice"><strong>Draft generated from code review; requires review by qualified counsel before production use.</strong></div>
+
+    <h2>Who we are</h2>
+    <p>LegalHub is a legal practice-management app with a Legal Library module. The app is offered for demonstration; it is operated by the owner identified in the in-app contact constant. This draft was generated from a code review and requires review by qualified counsel before production use.</p>
+
+    <h2>What we collect</h2>
+    <p>Account email and display name; your role and organization memberships; matters, documents and message metadata; invoices and notifications; Legal Library bookmarks, highlights and reading history; AI research run metadata and video session metadata. The demo build uses synthetic records and no real client data.</p>
+
+    <h2>How it is processed</h2>
+    <p>Data is stored in Supabase Postgres with row-level security. Practice data is organization-scoped; Legal Library reference content is global; bookmarks, highlights and history are visible only to you. Mutations go through server-side functions that derive your identity from the session.</p>
+
+    <h2>Storage and files</h2>
+    <p>Files are kept in a private storage bucket at 25 MiB maximum per file with a restricted file-type allowlist. Access to a file requires active membership in its organization and assignment to its matter.</p>
+
+    <h2>What we do not collect</h2>
+    <p>The app contains no analytics SDK, no advertising and no third-party crash-reporting SDK. Errors are reported through a redacting console reporter. Payment collection, AI research and video calls are provider-gated and disabled unless explicitly configured.</p>
+
+    <h2>Your controls</h2>
+    <p>You can edit your display name and change your password in Account settings. You can delete your account from the same screen after reading exactly what is removed. You can clear your reading history in the Library Saved screen.</p>
+
+    <h2>Deletion and contact</h2>
+    <p>Account deletion removes your sign-in, profile, memberships, Legal Library rows and your file records with their metadata. On projects where the automatic storage cleanup is deployed and verified, stored file bytes are also removed by a cleanup that runs every 10 minutes, so they may take up to about 10 minutes to disappear after your account is gone. On any other project or environment where that cleanup is not deployed and verified, deletion stays partial and stored bytes may remain until the operator runs a cleanup. It does not remove records owned by other people or provider-side records. Redacted audit entries are retained with the actor reference cleared. For questions, use the contact address in the in-app legal notice.</p>
+  </div>
+</main>
+<footer>
+  <div class="wrap">
+    <a href="index.html">Home</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="mailto:al3rar401@gmail.com">al3rar401@gmail.com</a>
+  </div>
+</footer>
+</body>
+</html>
